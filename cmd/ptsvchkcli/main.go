@@ -6,34 +6,36 @@ import (
 	"log"
 
 	"github.com/cheokman/ssm-go/api/ssm/ptsvchk"
+	"github.com/cheokman/ssm-go/config"
 	"github.com/cheokman/ssm-go/models"
 )
 
 func main() {
 	var (
-		useProd       bool
-		date          string
-		idtype        string
-		idnum         string
-		drliccode     string
-		wskeyOverride string
+		useProd bool
+		date    string
+		idtype  string
+		idnum   string
 	)
+
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		log.Fatalf("load config error: %v", err)
+	}
+	log.Printf("WSKey: %s \n", cfg.Flu.WSKey)
 
 	flag.BoolVar(&useProd, "prod", false, "Use production endpoint")
 	flag.StringVar(&date, "date", "", "求診日期 YYYYMMDD")
 	flag.StringVar(&idtype, "idtype", "P", "證件類別（預設 P）")
 	flag.StringVar(&idnum, "idnum", "", "證件號碼")
-	flag.StringVar(&drliccode, "drlic", "", "醫生牌照號碼")
-	flag.StringVar(&wskeyOverride, "wskey", "", "自訂 wskey（可選）")
 
 	flag.Parse()
 
 	req := models.SSMPtsvChkRequest{
-		WSKey:     wskeyOverride, // will be overridden by config if empty
-		Date:      date,
-		IDType:    idtype,
-		IDNum:     idnum,
-		DrLicCode: drliccode,
+		WSKey:  cfg.PTSV.WSKey, // will be overridden by config if empty
+		Date:   date,
+		IDType: idtype,
+		IDNum:  idnum,
 	}
 
 	resp, err := ptsvchk.CheckPtsvEligibility(req, useProd)

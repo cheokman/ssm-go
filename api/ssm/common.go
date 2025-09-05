@@ -46,7 +46,7 @@ var orgIDMapping = map[string]string{
 }
 
 // ParsePtsvResponseCode decodes the numeric response code into readable message
-func ParsePtsvResponseCode(code string) string {
+func ParseResponseCode(code string) string {
 	switch code {
 	case "0":
 		return "成功 或 符合資格"
@@ -73,6 +73,8 @@ func ParsePtsvResponseCode(code string) string {
 	}
 }
 
+var ParsePtsvResponseCode = ParsePtsvchkResponseCode
+
 // ParsePtsvchkResponseCode handles 21|orgId|serviceDate format or falls back to code parser
 func ParsePtsvchkResponseCode(code string) string {
 	if strings.HasPrefix(code, "21|") {
@@ -90,5 +92,5 @@ func ParsePtsvchkResponseCode(code string) string {
 		}
 		return "不符合資格（返回格式錯誤）: " + code
 	}
-	return ParsePtsvResponseCode(code)
+	return ParseResponseCode(code)
 }
