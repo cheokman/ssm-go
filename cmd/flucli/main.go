@@ -20,10 +20,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("load config error: %v", err)
 	}
-
+	log.Printf("WSKey: %s \n", cfg.Flu.WSKey)
 	req := models.SSMFluRequest{
-		WSKey:         cfg.WSKey,
-		Date:          "20250801",
+		WSKey:         cfg.Flu.WSKey,
+		Date:          "20250808",
 		IDType:        "P",
 		IDNum:         "12345678",
 		DrLicCode:     "MI0001",
@@ -34,7 +34,7 @@ func main() {
 		NoVacReasonID: "0000000000",
 	}
 
-	resp, err := flu.SendFluVaccineData(req, cfg.UseProd)
+	resp, err := flu.SendFluVaccineData(req, cfg.Flu.UseProd)
 	if err != nil {
 		log.Fatalf("send failed: %v", err)
 	}

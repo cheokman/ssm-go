@@ -1,5 +1,4 @@
-// File: api/ssm/flu/service.go
-package flu
+package ptsv
 
 import (
 	"log"
@@ -10,15 +9,16 @@ import (
 	"github.com/cheokman/ssm-go/models"
 )
 
-func SendFluVaccineData(req models.SSMFluRequest, useProd bool) (*models.SSMFluResponse, error) {
+// SendPtsvData sends outpatient vaccine data to SSM (ptsv endpoint)
+func SendPtsvData(req models.SSMPtsvRequest, useProd bool) (*models.SSMPtsvResponse, error) {
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		return nil, err
 	}
 
-	endpoint := cfg.Flu.TestURL
+	endpoint := cfg.PTSV.PTSVTestURL
 	if useProd {
-		endpoint = cfg.Flu.ProductionURL
+		endpoint = cfg.PTSV.PTSVProdURL
 	}
 
 	form := url.Values{}
@@ -26,21 +26,21 @@ func SendFluVaccineData(req models.SSMFluRequest, useProd bool) (*models.SSMFluR
 	form.Set("date", req.Date)
 	form.Set("idtype", req.IDType)
 	form.Set("idnum", req.IDNum)
-	form.Set("drliccode", req.DrLicCode)
-	form.Set("rstcode1", req.RstCode1)
-	form.Set("rstcode2", req.RstCode2)
+	form.Set("drliccode", req.DrLic)
+	form.Set("rstcode1", req.Result1)
+	form.Set("rscode2", req.Result2)
 	form.Set("seconds1", req.Seconds1)
 	form.Set("seconds2", req.Seconds2)
 	form.Set("novacreasonid", req.NoVacReasonID)
 
-	log.Printf("Sending Flu Vaccine Data to %s", endpoint)
+	log.Printf("Sending PTSV data to %s", endpoint)
 	result, err := ssm.DoPostWithRetry(endpoint, form)
 	if err != nil {
 		return nil, err
 	}
 
-	return &models.SSMFluResponse{
+	return &models.SSMPtsvResponse{
 		Code:    result,
-		Message: ssm.ParseFluResponseCode(result),
+		Message: ssm.ParsePtsvResponseCode(result),
 	}, nil
 }
