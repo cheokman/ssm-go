@@ -34,8 +34,13 @@ func CheckPtsvEligibility(req models.SSMPtsvChkRequest, useProd bool) (*models.S
 		return nil, err
 	}
 
+	parsed := ssm.ParsePtsvchkResponseCode(result)
 	return &models.SSMPtsvChkResponse{
-		Code:    result,
-		Message: ssm.ParsePtsvchkResponseCode(result),
+		Code:            result,
+		Message:         parsed.Message,
+		IsQualified:     parsed.IsQualified,
+		LastServiceDate: parsed.LastServiceDate,
+		OrgId:           parsed.OrgID,
+		OrgName:         parsed.OrgName,
 	}, nil
 }

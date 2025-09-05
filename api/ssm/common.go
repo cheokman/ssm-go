@@ -2,6 +2,31 @@ package ssm
 
 import "strings"
 
+type PtsvCodeParsed struct {
+	IsQualified     bool   `json:"is_qualified"`
+	Code            string `json:"code"`
+	Message         string `json:"message"`
+	OrgID           string `json:"org_id,omitempty"`
+	OrgName         string `json:"org_name,omitempty"`
+	LastServiceDate string `json:"last_service_date,omitempty"`
+}
+
+var orgIDMapping = map[string]string{
+	"api1op":  "民眾醫療中心（黑沙環）",
+	"api2op":  "民眾醫療中心（筷子基）",
+	"faom1op": "工人醫療所（台山）",
+	"faom2op": "工人醫療所（美的路）",
+	"faom4op": "工人醫療所（司打口）",
+	"kwerm9":  "澳門鏡湖急診",
+	"kwermg":  "澳門鏡湖急診婦科",
+	"kwermm":  "澳門鏡湖急診內科",
+	"kwermp":  "澳門鏡湖急診兒科",
+	"kwermu":  "澳門鏡湖急診未分類",
+	"kwermt":  "飛仔鏡湖急診內科",
+	"myorgop": "信和醫療中心",
+	"ocmoop":  "歸僑總會",
+}
+
 func ParseFluResponseCode(code string) string {
 	switch code {
 	case "0":
@@ -27,22 +52,6 @@ func ParseFluResponseCode(code string) string {
 	default:
 		return "未知錯誤碼: " + code
 	}
-}
-
-var orgIDMapping = map[string]string{
-	"api1op":  "民眾醫療中心（黑沙環）",
-	"api2op":  "民眾醫療中心（筷子基）",
-	"faom1op": "工人醫療所（台山）",
-	"faom2op": "工人醫療所（美的路）",
-	"faom4op": "工人醫療所（司打口）",
-	"kwerm9":  "澳門鏡湖急診",
-	"kwermg":  "澳門鏡湖急診婦科",
-	"kwermm":  "澳門鏡湖急診內科",
-	"kwermp":  "澳門鏡湖急診兒科",
-	"kwermu":  "澳門鏡湖急診未分類",
-	"kwermt":  "飛仔鏡湖急診內科",
-	"myorgop": "信和醫療中心",
-	"ocmoop":  "歸僑總會",
 }
 
 // ParsePtsvResponseCode decodes the numeric response code into readable message
@@ -73,10 +82,21 @@ func ParseResponseCode(code string) string {
 	}
 }
 
+func ParseResponseCodeStruct(code string) PtsvCodeParsed {
+	msg := ParseResponseCode(code)
+	isQualified := code == "0"
+
+	return PtsvCodeParsed{
+		IsQualified: isQualified,
+		Code:        code,
+		Message:     msg,
+	}
+}
+
 var ParsePtsvResponseCode = ParsePtsvchkResponseCode
 
 // ParsePtsvchkResponseCode handles 21|orgId|serviceDate format or falls back to code parser
-func ParsePtsvchkResponseCode(code string) string {
+func ParsePtsvchkResponseCode(code string) PtsvCodeParsed {
 	if strings.HasPrefix(code, "21|") {
 		parts := strings.Split(code, "|")
 		if len(parts) == 3 {
@@ -86,11 +106,15 @@ func ParsePtsvchkResponseCode(code string) string {
 			if orgName == "" {
 				orgName = "未知機構代碼"
 			}
-			return "不符合資格（48 小時內重複求診）\n" +
-				"上次機構: " + orgId + " - " + orgName + "\n" +
-				"上次求診日期: " + serviceDate
+			return PtsvCodeParsed{
+				IsQualified:     false,
+				Code:            "21",
+				Message:         "不符合資格（48 小時內重複求診）\n" + "上次機構: " + orgId + " - " + orgName + "\n" + "上次求診日期: " + serviceDate,
+				OrgID:           orgId,
+				OrgName:         orgName,
+				LastServiceDate: serviceDate,
+			}
 		}
-		return "不符合資格（返回格式錯誤）: " + code
 	}
-	return ParseResponseCode(code)
+	return ParseResponseCodeStruct(code)
 }

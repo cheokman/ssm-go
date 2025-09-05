@@ -59,4 +59,9 @@ func main() {
 	fmt.Println("=== 提交結果 ===")
 	fmt.Printf("原始代碼: %s\n", resp.Code)
 	fmt.Printf("說明訊息: %s\n", resp.Message)
+	if !resp.IsQualified {
+		fmt.Printf("上次求診日期: %s\n", resp.LastServiceDate)
+		fmt.Printf("機構代號: %s\n", resp.OrgId)
+		fmt.Printf("機構名稱: %s\n", resp.OrgName)
+	}
 }

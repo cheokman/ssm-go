@@ -1,23 +1,23 @@
 package models
 
-import "encoding/xml"
-
 type SSMPtsvRequest struct {
-	XMLName       xml.Name `xml:"ptsv"`
-	WSKey         string   `xml:"wskey"`
-	Date          string   `xml:"date"`
-	IDType        string   `xml:"idtype"`
-	IDNum         string   `xml:"idnum"`
-	DrLic         string   `xml:"drliccode"`
-	Result1       string   `xml:"rstcode1"`
-	Result2       string   `xml:"rscode2"`
-	Seconds1      string   `xml:"seconds1"`
-	Seconds2      string   `xml:"seconds2"`
-	NoVacReasonID string   `xml:"novacreasonid"`
+	WSKey         string `json:"wskey"`
+	Date          string `json:"date"`
+	IDType        string `json:"idtype"`
+	IDNum         string `json:"idnum"`
+	DrLic         string `json:"drliccode"`
+	Result1       string `json:"rstcode1"`
+	Result2       string `json:"rscode2"`
+	Seconds1      string `json:"seconds1"`
+	Seconds2      string `json:"seconds2"`
+	NoVacReasonID string `json:"novacreasonid"`
 }
 
 type SSMPtsvResponse struct {
-	XMLName xml.Name `xml:"ptsv_ret"`
-	Code    string   `xml:"code"`
-	Message string   `xml:"message"`
+	Code            string `json:"code"`
+	Message         string `json:"message"`
+	IsQualified     bool   `json:"is_qualified"`
+	OrgId           string `json:"org_id,omitempty"`
+	OrgName         string `json:"org_name,omitempty"`
+	LastServiceDate string `json:"last_service_date,omitempty"`
 }

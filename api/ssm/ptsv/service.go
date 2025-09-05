@@ -32,9 +32,13 @@ func SendPtsvData(req models.SSMPtsvRequest, useProd bool) (*models.SSMPtsvRespo
 	if err != nil {
 		return nil, err
 	}
-
+	parsed := ssm.ParsePtsvResponseCode(result)
 	return &models.SSMPtsvResponse{
-		Code:    result,
-		Message: ssm.ParsePtsvResponseCode(result),
+		Code:            result,
+		Message:         parsed.Message,
+		IsQualified:     parsed.IsQualified,
+		LastServiceDate: parsed.LastServiceDate,
+		OrgId:           parsed.OrgID,
+		OrgName:         parsed.OrgName,
 	}, nil
 }
