@@ -25,9 +25,16 @@ type PTSVConfig struct {
 	PTSVChkProdURL string `envconfig:"PTSVCHK_PROD_URL" default:"https://www.ssm.gov.mo/outpatient2/ptsvchk.ashx"`
 }
 
+type RTSSConfig struct {
+	WSKey          string `envconfig:"RTSS_WS_KEY" required:"true"`
+	RTSSChkTestURL string `envconfig:"RTSSCHK_TEST_URL" default:"https://www.ssm.gov.mo/outpatient2/rtsstest.ashx"`
+	RTSSChkProdURL string `envconfig:"RTSSCHK_PROD_URL" default:"https://www.ssm.gov.mo/outpatient2/rtss.ashx"`
+}
+
 type Config struct {
 	Flu  FluConfig
 	PTSV PTSVConfig
+	RTSS RTSSConfig
 }
 
 func LoadConfig() (*Config, error) {
