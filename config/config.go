@@ -17,7 +17,7 @@ type FluConfig struct {
 }
 
 type PTSVConfig struct {
-	WSKey          string `envconfig:"PTSV_WS_KEY" required:"true"`
+	WSKey          string `envconfig:"PTSV_WS_KEY" required:"false"`
 	UseProduction  bool   `envconfig:"PTSV_USE_PRODUCTION" default:"false"`
 	PTSVTestURL    string `envconfig:"PTSV_TEST_URL" default:"https://www.ssm.gov.mo/outpatient2/ptsvtest.ashx"`
 	PTSVProdURL    string `envconfig:"PTSV_PROD_URL" default:"https://www.ssm.gov.mo/outpatient2/ptsv.ashx"`
@@ -26,7 +26,7 @@ type PTSVConfig struct {
 }
 
 type RTSSConfig struct {
-	WSKey          string `envconfig:"RTSS_WS_KEY" required:"true"`
+	WSKey          string `envconfig:"RTSS_WS_KEY" required:"false"`
 	RTSSChkTestURL string `envconfig:"RTSSCHK_TEST_URL" default:"https://www.ssm.gov.mo/outpatient2/rtsstest.ashx"`
 	RTSSChkProdURL string `envconfig:"RTSSCHK_PROD_URL" default:"https://www.ssm.gov.mo/outpatient2/rtss.ashx"`
 }
