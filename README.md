@@ -25,7 +25,7 @@ Configuration for PTSV Service and its check endpoints.
 | Field            | Env Var               | Type   | Default                                               | Required | Description                     |
 | ---------------- | --------------------- | ------ | ----------------------------------------------------- | -------- | ------------------------------- |
 | `WSKey`          | `PTSV_WS_KEY`         | string | —                                                     | false    | Web service key (if required).  |
-| `UseProduction`  | `PTSV_USE_PRODUCTION` | bool   | `false`                                               | false    | Switch between test and prod.   |
+| `UseProd`        | `PTSV_USE_PRODUCTION` | bool   | `false`                                               | false    | Switch between test and prod.   |
 | `PTSVTestURL`    | `PTSV_TEST_URL`       | string | `https://www.ssm.gov.mo/outpatient2/ptsvtest.ashx`    | false    | PTSV test environment endpoint. |
 | `PTSVProdURL`    | `PTSV_PROD_URL`       | string | `https://www.ssm.gov.mo/outpatient2/ptsv.ashx`        | false    | PTSV production endpoint.       |
 | `PTSVChkTestURL` | `PTSVCHK_TEST_URL`    | string | `https://www.ssm.gov.mo/outpatient2/ptsvchktest.ashx` | false    | PTSV check (test).              |

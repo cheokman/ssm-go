@@ -25,7 +25,7 @@ func main() {
 		Waiting: "12", // or "-1"
 	}
 
-	resp, err := rtss.SubmitWaitingData(req, cfg.PTSV.UseProduction)
+	resp, err := rtss.SubmitWaitingData(req, cfg.RTSS.UseProd)
 	if err != nil {
 		fmt.Println("提交失敗:", err)
 		os.Exit(1)
