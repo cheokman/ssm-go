@@ -21,8 +21,13 @@ func SubmitWaitingData(req models.SSMRtssRequest, useProd bool) (*models.SSMRtss
 		endpoint = cfg.RTSS.RTSSChkProdURL
 	}
 
+	key := cfg.RTSS.WSKey
+	if req.WSKey != "" {
+		key = req.WSKey
+	}
+
 	form := url.Values{}
-	form.Set("wskey", req.WSKey)
+	form.Set("wskey", key)
 	form.Set("action", req.Action)
 	form.Set("fromam", req.FromAM)
 	form.Set("toam", req.ToAM)

@@ -21,9 +21,12 @@ func CheckPtsvEligibility(req models.SSMPtsvChkRequest, useProd bool) (*models.S
 	if useProd {
 		endpoint = cfg.PTSV.PTSVChkProdURL
 	}
-
+	key := cfg.PTSV.WSKey
+	if req.WSKey != "" {
+		key = req.WSKey
+	}
 	form := url.Values{}
-	form.Set("wskey", cfg.PTSV.WSKey)
+	form.Set("wskey", key)
 	form.Set("date", req.Date)
 	form.Set("idtype", req.IDType)
 	form.Set("idnum", req.IDNum)
