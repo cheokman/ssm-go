@@ -14,4 +14,5 @@ type SSMPtsvChkResponse struct {
 	OrgId           string `json:"org_id,omitempty"`
 	OrgName         string `json:"org_name,omitempty"`
 	LastServiceDate string `json:"last_service_date,omitempty"`
+	OriginalCode    string `json:"original_code,omitempty"`
 }
